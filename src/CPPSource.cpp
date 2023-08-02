@@ -7,24 +7,44 @@ class Robot {
 
 	class Port {
 		class Analog {
+			int& waitforlight = portone;
+			int& unused1 = porttwo;
+			int& unused2 = portthree;
+			int& unused3 = portfour;
+
 			int portone = 0;
 			int porttwo = 1;
 			int portthree = 2;
 			int portfour = 3;
 		};
 		class Digital {
+			int& leftbackbutton = portone;
+			int& rightbackbutton = porttwo;
+			int& frontbar = portthree;
+			int& unused1 = portfour;
+
 			int portone = 0;
 			int porttwo = 1;
 			int portthree = 2;
 			int portfour = 3;
 		};
 		class Servo {
+			int& arm = portone;
+			int& claw = porttwo;
+			int& unused1 = portthree;
+			int& unused2 = portfour;
+
 			int portone = 0;
 			int porttwo = 1;
 			int portthree = 2;
 			int portfour = 3;
 		};
 		class Motor {
+			int& leftwheel = portone;
+			int& rightwheel = porttwo;
+			int& unused1 = portthree;
+			int& unused2 = portfour;
+
 			int portone = 0;
 			int porttwo = 1;
 			int portthree = 2;
