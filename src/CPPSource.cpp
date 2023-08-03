@@ -6,55 +6,10 @@ class Robot {
 	float orientation;
 
 	class Port {
-		class Analog {
-			int& waitforlight = portone;
-			int& unused1 = porttwo;
-			int& unused2 = portthree;
-			int& unused3 = portfour;
-
-			int portone = 0;
-			int porttwo = 1;
-			int portthree = 2;
-			int portfour = 3;
-		};
-		class Digital {
-			int& leftbackbutton = portone;
-			int& rightbackbutton = porttwo;
-			int& frontbar = portthree;
-			int& unused1 = portfour;
-
-			int portone = 0;
-			int porttwo = 1;
-			int portthree = 2;
-			int portfour = 3;
-		};
-		class Servo {
-			int& arm = portone;
-			int& claw = porttwo;
-			int& unused1 = portthree;
-			int& unused2 = portfour;
-
-			int portone = 0;
-			int porttwo = 1;
-			int portthree = 2;
-			int portfour = 3;
-		};
-		class Motor {
-			int& leftwheel = portone;
-			int& rightwheel = porttwo;
-			int& unused1 = portthree;
-			int& unused2 = portfour;
-
-			int portone = 0;
-			int porttwo = 1;
-			int portthree = 2;
-			int portfour = 3;
-
-			float leftmotormultiplier;
-			float rightmotormultiplier;
-			float timemultiplier;
-			float speedlossmultiplier;
-		};
+		Port Analog;	
+		Port Digital;
+		Port Motor;
+		Port Servo;
 	};
 	class Measurements {
 		class Physical {
@@ -118,4 +73,11 @@ class Menu {
 	bool handsoff = false;
 	bool collision = true;
 	int menubuffer = 0;
+};
+
+class Port {
+	int portzero = 0;
+	int portone = 1;
+	int porttwo = 2;
+	int portthree = 3;
 };
