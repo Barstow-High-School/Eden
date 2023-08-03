@@ -1,27 +1,116 @@
 #include <iostream>
-using namespace std;
+using namespace Mine;
 
 class Robot {
 	WorldSpace Position;
 	float orientation;
 
-	class Port {
-		Port Analog;	
-		Port Digital;
-		Port Motor;
-		Port Servo;
+	class External {
+		class Analog {
+			int reading(int port);	
+		};
+		class Digital {
+			int reading(int port);
+		};
+		class Motor {
+			void clearposition(int port);
+			int getposition(int port);
+			void brake(int port);
+			void setpercent(int port, float percent);
+			float getpercent(int port);
+			void off(int port);
+			void alloff();
+		};
+		class Servo {
+			void setstatus(int port, int status);
+			int getstatus(int port);
+			void setallstatus(int status);
+			void setposition(int port, int ticks);
+			int getposition(int port);
+		}
+	};
+	class Internal {
+		class Accelerometer {
+			callibrate();
+			class Reading {
+				float x();
+				float y();
+				float z();
+				float a();
+			};
+		};
+		class Gyroscope {
+			callibrate();
+			class Reading {
+				float x();
+				float y();
+				float z();
+				float a();
+			};
+		
+		};
+		class Magnetometer {
+			callibrate();
+			class Reading {
+				float x();
+				float y();
+				float z();
+				float a();
+			};
+
+		};
+		class Battery {
+			float power_level();
+		};	
+	};
+	class Screen {
+		class Button {
+			void setvisibility(bool vis);
+			bool getvisibility();
+			class Down {
+				a();
+				b();
+				c();
+				x();
+				y();
+				z();
+				any();
+			};
+			class Up {
+				a();
+				b();
+				c();
+				x();
+				y();
+				z();
+				any();			
+			};
+			class Pressed {
+				a();
+				b();
+				c();
+				x();
+				y();
+				z();
+				any();			
+			};
+		}
+		class Console {
+			void clear();
+		}
 	};
 	class Measurements {
+		void diagnostics(char[]);
 		class Physical {
 			class Wheel {
-				float wheelradius;
-				float axelradius;
-				float turnrate;	
+				const float wheelradius;
+				const float axelradius;
+				const float turnrate;	
 			};
 			class Arm {
-				float armlength;
-				float armoffsetz;
-				float armoffsetx;
+				const float armlength;
+				const float armoffsetz;
+				const float armoffsetx;
 			};
 		};
 		class Digital {
@@ -73,11 +162,4 @@ class Menu {
 	bool handsoff = false;
 	bool collision = true;
 	int menubuffer = 0;
-};
-
-class Port {
-	int portzero = 0;
-	int portone = 1;
-	int porttwo = 2;
-	int portthree = 3;
 };
