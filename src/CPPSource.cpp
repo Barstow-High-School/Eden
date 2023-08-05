@@ -210,10 +210,3 @@ using namespace Mine;
 		SubSystems Subsystems;
 		Screen Screen;
 	};
-
-int main () { 
-	Robot Adam;
-	int bweh = Adam.Measurements.Physical.Wheel.wheelradius;
-	std::cout << bweh;
-	return 0;
-}
