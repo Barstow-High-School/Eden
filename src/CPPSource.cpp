@@ -149,9 +149,18 @@ class WorldSpace {
 };
 
 class Time {
-	int centisec;
-	int sec;
-	int min;
+	class StopWatch {
+		void start();
+		int centisec;
+		int sec;
+		int min;
+	};
+	class Timer {
+		void start(int minutes, int seconds, int centiseconds);
+		int centisec;
+		int sec;
+		int min;
+	};
 };
 
 class Menu {
