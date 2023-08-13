@@ -9,58 +9,9 @@
 #include <fstream>    // File input/output
 #include <ctime>      // Time functions
 #include <cstdlib>    // General utilities
-#include <kipr/wombat.h>
+#include "C:\Users\samiy\Downloads\Robotics\kipr\kipr\wombat.h"
 
 namespace Aztec {
-	class Timer {
-		bool paused = false;
-	public:
-		void start() {
-			
-		}
-		void pause() {
-			paused = !paused;
-		}
-		void stop() {
-
-		}
-		float elapsed() {
-
-		}
-		float remaining() {
-			
-		}
-	};
-
-	class StopWatch {
-	public:
-		int precision = 1;
-	private:
-		bool paused = false;
-		void(*stopwatch()) {
-			Timer();
-		}
-		thread StopWatch = thread_create(stopwatch);
-	public:
-		void start() {
-			thread_start(this->StopWatch);
-		}
-		void pause() {
-			paused = !paused;
-		}
-		void stop() {
-
-		}
-		float elapsed() {
-
-		}
-	};
-	class Time {
-	public:
-		class Timer Timer;
-		class StopWatch StopWatch;
-	};
-
 	class Up {
 	public:
 		bool a() {
