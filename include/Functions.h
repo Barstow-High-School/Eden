@@ -8,7 +8,7 @@ float absolute(float);
 // abs() wasnt working for whatever reason idk
 // out (absolute value)
 
-void(*CollisionCheck());
+//void(*CollisionCheck());
 // Checks if the robot is attempting to move and failing
 // WIP (need to check the Gs in the direction its not going)
 
@@ -45,7 +45,7 @@ void APCalc(float, float);
 // calculates the new position given the previous orientation and the previous
 // location, as well as the delta orientation and delta position
 
-void Status(char hex[]);
+int Status(char hex[]);
 // in (hexadecimal string which prints a set of chosen values)
 /*
 Type the function like this
@@ -87,10 +87,10 @@ float degrees(float);
 // converts radians to degrees
 // out (degrees)
 
-void(*Velocity());
+//void(*Velocity());
 // calculates the current velocity of each wheel in powerpercent
 
-void(*Timer());
+//void(*Timer());
 // Acts as a stopwatch. records time as: min,sec,centisec
 // sec and centisec rollover. youll never see 61 seconds, just 1 min 1 sec.
 
@@ -124,11 +124,11 @@ void DriveDistance(float, float, float);
 // in (base distance, turn distance, time);
 // moves the wheels together to a goal position in a certain amount of time
 
-void TankAccelerate(float, float, int);
+void TankAccelerate(float, float, float);
 // in (left goal, right goal, acceleration value)
 // moves the wheels independently, going faster over time
 
-void DriveAccelerate(float, float, int);
+void DriveAccelerate(float, float, float);
 // in (base speed goal, turn speed goal, acceleration value)
 // moves the wheels together, going faster over time
 
@@ -314,36 +314,27 @@ void DriveDistance(float BaseD, float DifD, float Time) {
 /////////////////
 /////////////////
 
-void TankAccelerate(float GoalSpeedL, float GoalSpeedR, int Acceleration) {
+void TankAccelerate(float GoalSpeedL, float GoalSpeedR, float Acceleration) {
 	if (commandCalls == 1) {
 		printf("TankAccelerate called. \n");
 	}
 	float SpeedL = Lp;
-	printf("EHEREEREREE%f \n", Lp);
 	float DeltaLp = GoalSpeedL - SpeedL;
 	float Linc = DeltaLp / 25;
 
 	float SpeedR = Rp;
 	float DeltaRp = GoalSpeedR - SpeedR;
 	float Rinc = DeltaRp / 25;
-	int count = 0;
-
-	while (1) {
-		TankSpeed(SpeedL, SpeedR, (-0.1 * Acceleration) + 1.1);
-		printf("SpeedL = %f \n", SpeedL);
-		printf("Linc = %f \n", Linc);
-		printf("count = %i \n", count);
+	int i = 0;
+    
+	for (i=0; i < 25; i++) {
+		TankSpeed(SpeedL, SpeedR, Acceleration);
 		SpeedL += Linc;
 		SpeedR += Rinc;
-		count = count + 1;
-		if (count > 24) {
-			break;
-		}
 	}
-	TankSpeed(GoalSpeedL, GoalSpeedR, (-0.1 * Acceleration) + 1.1);
 }
 
-void DriveAccelerate(float GoalBase, float GoalDif, int Acceleration) {
+void DriveAccelerate(float GoalBase, float GoalDif, float Acceleration) {
 	if (commandCalls == 1) {
 		printf("DriveAccelerate called. \n");
 	}
@@ -355,8 +346,9 @@ void DriveAccelerate(float GoalBase, float GoalDif, int Acceleration) {
 	SpeedDifD = SpeedDifD / 25;
 	float SpeedB = CurrentBase;
 	float SpeedD = CurrentDif;
-	int count = 0;
-	while (count < 25) {
+	int i = 0;
+    
+	for (i=0; i < 25; i++) {
 		DriveSpeed(SpeedB, SpeedD, (Acceleration / 1000));
 		SpeedB += SpeedDifB;
 		SpeedD += SpeedDifD;
@@ -561,9 +553,10 @@ void HandsOff() {
 }
 
 void Startup() {
-	if (commandCalls == 1) {
+    if (commandCalls == 1) {
 		printf("Startup called. \n");
 	}
+
 	if (LMM > RMM) {
 		WMM = 1 / LMM;
 	}
@@ -585,18 +578,13 @@ void Startup() {
 	Brake();
 	CMR();
 	SetArm(90, 90);
-
+/*
 	thread Vel = thread_create(Velocity);
 	thread_start(Vel);
 
 	thread Time = thread_create(Timer);
 	thread_start(Time);
-
-	Menu();
-	if (HandsOffToggle == true) {
-		HandsOff();
-	}
-	Tournament();
+    */
 }
 
 /////////////////
@@ -611,7 +599,7 @@ float Accelerometer() {
 	return AccelAvg;
 }
 
-void(*CollisionCheck()) {
+/*void(*CollisionCheck()) {
 	if (commandCalls == 1) {
 		printf("CollisionCheck called. \n");
 	}
@@ -637,7 +625,7 @@ void(*CollisionCheck()) {
 	}
 	return 0;
 }
-
+*/
 void CollisionReset() {
 	if (commandCalls == 1) {
 		printf("CollisionReset called. \n");
@@ -755,21 +743,21 @@ void TurnTo(int DeltaO, float Time) {
 	}
 
 	float GoalO = CurrentO + rad(DeltaO);
-	float WheelAngle = GoalO * (TurnRate / 2) * 57.2957795131;
-	TankRotation(-WheelAngle, WheelAngle, Time);
-
-	CurrentO = GoalO;
+    printf("goalo = %f", GoalO);
+	float WheelAngle = degrees(GoalO * (TurnRate / 2));
+    printf("wheel angle = %f", WheelAngle);
+    TankRotation(WheelAngle, -WheelAngle, Time);
 }
 
 void GoTo(float GoalX, float GoalY, float Time) {
 	if (commandCalls == 1) {
 		printf("GoTo called. \n");
 	}
-	float DistX = CurrentX - GoalX;
-	float DistY = CurrentY - GoalY;
+	float DistX = GoalX - CurrentX;
+	float DistY = GoalY - CurrentY;
 	float DistC = sqrt(pow(DistX, 2) + pow(DistY, 2));
 	float arc = degrees(atan(DistY / DistX));
-	printf("Arc = %f. \n", arc);
+	printf("Arc = %f, deltax = %f, deltay = %f, distance = %f. \n", arc, DistX, DistY,DistC);
 
 	TurnTo(arc, Time / 4);
 
@@ -777,8 +765,6 @@ void GoTo(float GoalX, float GoalY, float Time) {
 	Wait(0.01);
 
 	TankDistance(DistC, DistC, ((Time / 4) * 3));
-	CurrentX = GoalX;
-	CurrentY = GoalY;
 }
 
 void GoAndFace(float GoalX, float GoalY, int GoalO, float Time) {
@@ -819,23 +805,24 @@ void FollowCurve(float Radius, float Distance, float Time) {
 // MISCELLANEOUS//
 /////////////////
 
-void Status(char hex[]) {
+int Status(char hex[]) {
+
 	if (commandCalls == 1) {
 		printf("Status called. \n");
 	}
+
 	int onoff[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 	int loopn = 0;
 
 	while (loopn < 12) {
+
 		if (hex[loopn / 4] == '0') {
 			onoff[loopn] = 0;
 			onoff[loopn + 1] = 0;
 			onoff[loopn + 2] = 0;
 			onoff[loopn + 3] = 0;
 			loopn = loopn + 4;
-		}
-
-		else if (hex[loopn / 4] == '1') {
+		} else if (hex[loopn / 4] == '1') {
 			onoff[loopn] = 0;
 			onoff[loopn + 1] = 0;
 			onoff[loopn + 2] = 0;
@@ -938,7 +925,10 @@ void Status(char hex[]) {
 		printf("%c", hex[loop]);
 	}
 	printf("\n\n");
-
+    if(hex[0] == '0' && hex[1] == '0' && hex[2] == '0'){
+        return 0;
+    }
+    
 	if (onoff[0] == 1) {
 		printf("O: %f, X: %f, Y: %f, Athena: %i\n", CurrentO, CurrentX, CurrentY,
 					 AthenaOn);
@@ -1002,11 +992,14 @@ void Status(char hex[]) {
 		printf("Command calls: On \n");
 		commandCalls = 1;
 	}
+    
 	if (onoff[11] == 0) {
 		printf("Command calls: Off \n");
 		commandCalls = 0;
 	}
+    
 	printf("       ==========================\n\n");
+    return 1;
 }
 
 int MOE(float InputA, float InputB, float Range) {
@@ -1045,7 +1038,7 @@ float rad(float degrees) {
 	return rad;
 }
 
-void(*Velocity()) {
+/*void(*Velocity()) {
 	if (commandCalls == 1) {
 		printf("Velocity called. \n");
 	}
@@ -1063,7 +1056,7 @@ void(*Velocity()) {
 	}
 	return 0;
 }
-
+*/
 float degrees(float radians) {
 	if (commandCalls == 1) {
 		printf("degrees called. \n");
@@ -1083,7 +1076,7 @@ int clamp(float min, float val, float max) {
 	}
 }
 
-void(*Timer()) {
+/*void(*Timer()) {
 	if (commandCalls == 1) {
 		printf("Timer called. \n");
 	}
@@ -1101,7 +1094,7 @@ void(*Timer()) {
 	}
 	return 0;
 }
-
+*/
 void Menu() {
 	extra_buttons_show();
 
@@ -1172,6 +1165,9 @@ void Menu() {
 	}
 	if (AthenaToggle == false) {
 		AthenaOn = 0;
+	}
+    if (HandsOffToggle == true) {
+		HandsOff();
 	}
     hex[0] = 'F';
     hex[1] = 'F';
