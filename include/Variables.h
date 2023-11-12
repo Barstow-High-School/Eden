@@ -22,9 +22,6 @@ float Armlength = 8;  // arm length in inches
 float Armoffsety = 2; // vertical arm offset in inches
 float Armoffsetx = 2; // horizontal arm offset in inches
 //  //  /  //  //
-float Botoffsetx = 4; // bot offset in inches (roomba starting box is 0,0)
-float Botoffsety = 0; // the center of the wheels "axel" is the bot position
-//  //  /  //  //
 float LMM = 1; // if a motor is drifting, adjust this number accordingly
 float RMM = 1; // if its drifting to the left, lower the right motor multiplier  (between 1 and 0)
 float timemult = 1; // multiplies time in order to adjust for distance loss (greater than 1)
@@ -38,7 +35,7 @@ float CurrentX = 0; // robot's X offset relative to global setup
 float CurrentY = 0; // robot's Y offset relative to global setup
 
 int AthenaOn = 1; // disables pathfinding if its draining too many recources
-float athenaMargin = 0; // margin of error in which math is chosen, higher for less recourses, lower for more precision
+float athenaMargin = 5; // margin of error in which math is chosen, higher for less recourses, lower for more precision
 int CollisionChecks = 1; //disables collision checks
 
 // IGNORE THIS SHIT
@@ -58,7 +55,7 @@ int Lt = 0;
 int Ro = 0;
 int Rt = 0;
 float WMM = 1;
-char hex[] = {'F', 'F', 'F'};
+char hex[3] = {'0', '0', '0'};
 int commandCalls = 0;
 int Collision = 0;
 
