@@ -1,4 +1,4 @@
-#include <kipr/wombat.h>
+#include "C:\Users\samiy\Downloads\kipr.wallaby\wombat.h"
 #include <math.h>
 #include <stdio.h>
 #include <assert.h>	
@@ -12,5 +12,5 @@
 #include <stddef.h>	
 #include <locale.h>
 #include <stdlib.h>
-#include <pthread.h>
+//#include <pthread.h>
 #include <stdbool.h>
