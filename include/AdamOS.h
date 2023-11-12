@@ -1,3 +1,6 @@
-#include "SourceHeaders.h"
-#include "SourceVariables.h"
-#include "SourceFunctions.h"
+extern "C" {
+    #include "Cheaders.h"
+    #include "Variables.h"
+    #include "Functions.h"
+}
+#include "CPPheaders.h"
