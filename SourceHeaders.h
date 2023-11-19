@@ -12,3 +12,5 @@
 #include <stddef.h>	
 #include <locale.h>
 #include <stdlib.h>
+#include <pthread.h>
+#include <stdbool.h>
