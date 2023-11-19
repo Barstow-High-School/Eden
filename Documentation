@@ -258,3 +258,6 @@ void HandsOff();
 
 void Startup();
 // initiates system resets, prepares the robot to run
+
+void Menu();
+//silly little screen for inputs before a run :3
