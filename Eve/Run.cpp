@@ -1,4 +1,4 @@
-#include "Backend.h"
+#include "D:\EdenCommon\UserOS.h"
 using namespace UsOS;
 void Tournament();
 void Initialize();
@@ -22,8 +22,6 @@ void Tournament() {
 	std::cout << "The way to get started is to quit talking and begin doing.";
 }
 void Initialize() {
-	bknd.LeftMotor = 0;
-	bknd.RightMotor = 3;
 	bknd.LMM = 1;
 	bknd.RMM = 1;
 
