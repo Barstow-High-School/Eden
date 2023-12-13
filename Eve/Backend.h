@@ -1,16 +1,17 @@
 #pragma once
-#include "D:\EdenCommon\UserOS.h"
+#include "D:\EdenCommon\Backend.h"
 class Eve : public common {
-	void TankSpeed(float SpeedL, float SpeedR, float Time) const override {
+public:
+	void TankSpeed(float SpeedL, float SpeedR, float Time) {
 		if (commandCalls) {
 			printf("TankSpeed called. \n");
 		}
-		float Lo = TTIW(gmpc(LeftMotor));
-		float Ro = TTIW(gmpc(RightMotor));
+		float Lo = TTIW(Lc);
+		float Ro = TTIW(Rc);
 		create_drive_direct((SpeedL * LMM), (SpeedR * RMM));
 		msleep((Time * 1000) * timemult);
-		float Lt = TTIW(gmpc(LeftMotor));
-		float Rt = TTIW(gmpc(RightMotor));
+		float Lt = TTIW(Lc);
+		float Rt = TTIW(Rc);
 		float DelL = Lt - Lo;
 		float DelR = Rt - Ro;
 		if (AthenaOn) {
@@ -18,7 +19,7 @@ class Eve : public common {
 		}
 	}
 
-	int DTTW(float Degrees) const override {
+	int DTTW(float Degrees) {
 		if (commandCalls) {
 			printf("DTTW called. \n");
 		}
@@ -26,7 +27,7 @@ class Eve : public common {
 		return Ticks;
 	}
 
-	float TTDW(int Ticks) const override {
+	float TTDW(int Ticks) {
 		if (commandCalls) {
 			printf("TTDW called. \n");
 		}
@@ -34,7 +35,7 @@ class Eve : public common {
 		return Degrees;
 	}
 
-	float DTIW(float Degrees) const override {
+	float DTIW(float Degrees) {
 		if (commandCalls) {
 			printf("DTIW called. \n");
 		}
@@ -42,7 +43,7 @@ class Eve : public common {
 		return Inches;
 	}
 
-	float ITDW(float Inches) const override {
+	float ITDW(float Inches) {
 		if (commandCalls) {
 			printf("ITDW called. \n");
 		}
@@ -50,7 +51,7 @@ class Eve : public common {
 		return Degrees;
 	}
 
-	float TTIW(int Ticks) const override {
+	float TTIW(int Ticks) {
 		if (commandCalls) {
 			printf("TTIW called. \n");
 		}
@@ -58,7 +59,7 @@ class Eve : public common {
 		return Inches;
 	}
 
-	int ITTW(float Inches) const override {
+	int ITTW(float Inches) {
 		if (commandCalls) {
 			printf("ITTW called. \n");
 		}
@@ -66,7 +67,7 @@ class Eve : public common {
 		return Ticks;
 	}
 
-	int DTTA(float Degrees) const override {
+	int DTTA(float Degrees) {
 		if (commandCalls) {
 			printf("DTTA called. \n");
 		}
@@ -74,7 +75,7 @@ class Eve : public common {
 		return Tics;
 	}
 
-	float TTDA(int Tics) const override {
+	float TTDA(int Tics) {
 		if (commandCalls) {
 			printf("TTDA called. \n");
 		}
@@ -82,7 +83,7 @@ class Eve : public common {
 		return Degrees;
 	}
 
-	int DTTC(float Degrees) const override {
+	int DTTC(float Degrees) {
 		if (commandCalls) {
 			printf("DTTC called. \n");
 		}
@@ -90,7 +91,7 @@ class Eve : public common {
 		return Tics;
 	}
 
-	float TTDC(int Tics) const override {
+	float TTDC(int Tics) {
 		if (commandCalls) {
 			printf("TTDC called. \n");
 		}
@@ -98,18 +99,38 @@ class Eve : public common {
 		return Degrees;
 	}
 
-	void Stop() const override {
+	void Stop() {
 		if (commandCalls) {
 			printf("Stop called. \n");
 		}
 		TankSpeed(0, 0, 0.1);
 	}
 
-	void CMR() const override {
+	void CMR() {
 		if (commandCalls) {
 			printf("CMR called. \n");
 		}
-		cmpc(LeftMotor);
-		cmpc(RightMotor);
+		//cmpc(LeftMotor);
+		//cmpc(RightMotor);
+	}
+	long gpwmc(bool wheel) {
+		long l, r = 0;
+		_create_get_raw_encoders(&l, &r);
+		//0 = left, 1 = right
+		if (wheel) {
+			return r;
+		} else return l;
+	}
+	void Velocity() {
+		if (commandCalls) {
+			printf("Velocity called. \n");
+		}
+		while (1) {
+			Lv = gpwmc(0);
+			Rv = gpwmc(1);
+			Lp = Lv / 6;
+			Rp = Rv / 6;
+		}
 	}
 };
+Eve ebknd;
