@@ -1,5 +1,6 @@
 #pragma once
-#include "Backend.h"
+#include "D:\Eve\Backend.h"
+#include "D:\Adam\Backend.h"
 using string = std::string;
 
 namespace UsOS {
@@ -299,18 +300,20 @@ namespace UsOS {
 	};
 	class cons {
 	public:
-		void Log() {}
-
+		void Log() {
+			printf("\n");
+		}
 		template <typename In1, typename... InN>
 		void Log(In1 Current, InN... Rest) {
 			if (sizeof...(Rest) > 0) {
-				std::cout << Current << ", ";
+				printf("%d, ",Current);
 			}
-			else {
-				std::cout << Current << ".\n";
+			else if(sizeof...(Rest) == 0) {
+				printf("\n");
 			}
 			Log(Rest...);
 		}
+
 		void Clear() {
 			console_clear();
 
