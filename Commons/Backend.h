@@ -1,6 +1,4 @@
 #pragma once
-// figure out how to put this in a seperate namespace
-
 #include "C:\Users\samiy\Downloads\Robotics\kipr\kipr\wombat.h"
 //#include "C:\Users\samiy\Downloads\kipr.wallaby\wombat.h"
 //#include <kipr/wombat.h>
@@ -58,6 +56,8 @@ public:
 	int Rv = 0;
 	float Lp = 0;
 	float Rp = 0;
+	int Lc = 0;
+	int Rc = 0;
 
 	float WMM = 1;
 	const char Sfff[3] = { 'f', 'f', 'f' };
@@ -301,9 +301,82 @@ public:
 	void Menu();
 	// Start menu allowing for live run adjustment
 	*/
-	virtual void TankSpeed(float SpeedL, float SpeedR, float Time) const = 0 {
+
+	virtual int DTTW(float Degrees){
 		//Dummy Function
 		printf("common");
+		return 0;
+	}
+
+	virtual float TTDW(int Ticks){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+
+	virtual float DTIW(float Degrees){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+
+	virtual float ITDW(float Inches){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+
+	virtual float TTIW(int Ticks){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+
+	virtual int ITTW(float Inches){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+
+	virtual int DTTA(float Degrees){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+
+	virtual float TTDA(int Tics){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+
+	virtual int DTTC(float Degrees){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+
+	virtual float TTDC(int Tics){
+		//Dummy Function
+		printf("common");
+		return 0;
+	}
+	virtual void Stop(){
+		//Dummy Function
+		printf("common");
+	}
+
+	virtual void CMR(){
+		//Dummy Function
+		printf("common");
+	}
+
+	virtual void TankSpeed(float SpeedL, float SpeedR, float Time){
+		//Dummy Function
+		printf("common");
+	}
+	void cmpc(int &m) {
+		m = 0;
 	}
 	void TankRotation(float RotL, float RotR, float Time) {
 		if (commandCalls) {
@@ -484,75 +557,7 @@ public:
 		float degrees = radians * 57.2957795131;
 		return degrees;
 	}
-	virtual int DTTW(float Degrees) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
 
-	virtual float TTDW(int Ticks) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-
-	virtual float DTIW(float Degrees) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-
-	virtual float ITDW(float Inches) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-
-	virtual float TTIW(int Ticks) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-
-	virtual int ITTW(float Inches) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-
-	virtual int DTTA(float Degrees) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-
-	virtual float TTDA(int Tics) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-
-	virtual int DTTC(float Degrees) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-
-	virtual float TTDC(int Tics) {
-		//Dummy Function
-		printf("common");
-		return 0;
-	}
-	virtual void Stop() {
-		//Dummy Function
-		printf("common");
-	}
-
-	virtual void CMR() {
-		//Dummy Function
-		printf("common");
-	}
-	float Accelerometer() { return (accel_x() + accel_y() + accel_z()) / 3; }
 	void Wait(float Time) {
 		if (commandCalls) {
 			printf("Wait called. \n");
@@ -733,8 +738,7 @@ public:
 		}
 
 		if (onoff[2]) {
-			printf("GMPC Left: %i, Right: %i, Average: %i \n", gmpc(LeftMotor),
-				gmpc(RightMotor), ((gmpc(LeftMotor) + gmpc(RightMotor)) / 2));
+			printf("GMPC Left: %i, Right: %i, Average: %i \n", Lc, Rc, ((Lc + Rc) / 2));
 		}
 
 		if (onoff[3]) {
@@ -807,12 +811,11 @@ public:
 				msleep(1);
 
 				if (power_level() < 0.33) {
-					printf("Battery Critical: %.0f%% \n", power_level() * 100);
+					printf("Brain Battery Critical: %.0f%% \n", power_level() * 100);
 				}
-				if (MOE(Accelerometer(), 0, 0.25)) {
-					printf("Accelerometer Calibration Recomended \n\n");
+				if (get_create_battery_charge() < 0.33) {
+					printf("Roomba Battery Critical: %.0f%% \n", get_create_battery_charge() * 100);
 				}
-
 				hex[0] = 'F';
 				hex[1] = 'F';
 				hex[2] = 'F';
@@ -827,13 +830,13 @@ public:
 				if (power_level() < 0.33) {
 					printf("Battery Critical: %.0f%% \n", power_level() * 100);
 				}
-				if (MOE(Accelerometer(), 0, 0.25)) {
-					printf("Accelerometer Calibration Recomended \n\n");
+				if (get_create_battery_charge() < 0.33) {
+					printf("Roomba Battery Critical: %.0f%% \n", get_create_battery_charge() * 100);
 				}
 
 				printf("   AutoTravel    CONFIRM?    Diagnostic \n\n");
-				printf("    Athena %d    HandsOff %d  Collisions %d\n", AthenaToggle,
-					HandsOffToggle, CollisionToggle);
+				printf("    Athena %d    HandsOff %d  Collisions %d\n", 
+						AthenaToggle, HandsOffToggle, CollisionToggle);
 				if (a_button_clicked()) {
 					AutoTravel = !AutoTravel;
 				}
@@ -874,22 +877,9 @@ public:
 		hex[1] = 'F';
 		hex[2] = 'F';
 	}
-	void Velocity() {
-		if (commandCalls) {
-			printf("Velocity called. \n");
-		}
-		while (1) {
-			float VLo = gmpc(LeftMotor);
-			float VRo = gmpc(RightMotor);
-			msleep(100);
-			float VLt = gmpc(LeftMotor);
-			float VRt = gmpc(RightMotor);
-
-			Lv = (VLt - VLo) * 10;
-			Rv = (VRt - VRo) * 10;
-			Lp = Lv * 0.06;
-			Rp = Rv * 0.06;
-		}
+	virtual void Velocity(){
+		printf("Common");
+		//dummy function
 	}
 	void Clock() {
 		while (1) {
