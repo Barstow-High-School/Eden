@@ -1,19 +1,20 @@
 #pragma once
-#include "D:\EdenCommon\UserOS.h"
+#include "D:\EdenCommon\Backend.h"
 class Adam : public common {
+public:
 	short int LeftMotor;  // left motor port
 	short int RightMotor; // right motor port
-	void TankSpeed(float SpeedL, float SpeedR, float Time) const override {
+	void TankSpeed(float SpeedL, float SpeedR, float Time) {
 		if (commandCalls) {
 			printf("TankSpeed called. \n");
 		}
-		float Lo = TTIW(gmpc(LeftMotor));
-		float Ro = TTIW(gmpc(RightMotor));
+		float Lo = TTIW(Lc);
+		float Ro = TTIW(Rc);
 		setpwm(LeftMotor, (SpeedL * LMM));
 		setpwm(RightMotor, (SpeedR * RMM));
 		msleep((Time * 1000) * timemult);
-		float Lt = TTIW(gmpc(LeftMotor));
-		float Rt = TTIW(gmpc(RightMotor));
+		float Lt = TTIW(Lc);
+		float Rt = TTIW(Rc);
 		float DelL = Lt - Lo;
 		float DelR = Rt - Ro;
 		if (AthenaOn) {
@@ -22,14 +23,14 @@ class Adam : public common {
 	}
 
 	void Stop() {
-		if (commandCalls) const override {
+		if (commandCalls) {
 			printf("Stop called. \n");
 		}
 		freeze(LeftMotor);
 		freeze(RightMotor);
 	}
 
-	int DTTW(float Degrees) const override {
+	int DTTW(float Degrees) {
 		if (commandCalls) {
 			printf("DTTW called. \n");
 		}
@@ -37,7 +38,7 @@ class Adam : public common {
 		return Ticks;
 	}
 
-	float TTDW(int Ticks) const override {
+	float TTDW(int Ticks) {
 		if (commandCalls) {
 			printf("TTDW called. \n");
 		}
@@ -45,7 +46,7 @@ class Adam : public common {
 		return Degrees;
 	}
 
-	float DTIW(float Degrees) const override {
+	float DTIW(float Degrees) {
 		if (commandCalls) {
 			printf("DTIW called. \n");
 		}
@@ -53,7 +54,7 @@ class Adam : public common {
 		return Inches;
 	}
 
-	float ITDW(float Inches) const override {
+	float ITDW(float Inches) {
 		if (commandCalls) {
 			printf("ITDW called. \n");
 		}
@@ -61,7 +62,7 @@ class Adam : public common {
 		return Degrees;
 	}
 
-	float TTIW(int Ticks) const override {
+	float TTIW(int Ticks) {
 		if (commandCalls) {
 			printf("TTIW called. \n");
 		}
@@ -69,7 +70,7 @@ class Adam : public common {
 		return Inches;
 	}
 
-	int ITTW(float Inches) const override {
+	int ITTW(float Inches) {
 		if (commandCalls) {
 			printf("ITTW called. \n");
 		}
@@ -77,7 +78,7 @@ class Adam : public common {
 		return Ticks;
 	}
 
-	int DTTA(float Degrees) const override {
+	int DTTA(float Degrees) {
 		if (commandCalls) {
 			printf("DTTA called. \n");
 		}
@@ -85,7 +86,7 @@ class Adam : public common {
 		return Tics;
 	}
 
-	float TTDA(int Tics) const override {
+	float TTDA(int Tics) {
 		if (commandCalls) {
 			printf("TTDA called. \n");
 		}
@@ -93,7 +94,7 @@ class Adam : public common {
 		return Degrees;
 	}
 
-	int DTTC(float Degrees) const override {
+	int DTTC(float Degrees) {
 		if (commandCalls) {
 			printf("DTTC called. \n");
 		}
@@ -101,7 +102,7 @@ class Adam : public common {
 		return Tics;
 	}
 
-	float TTDC(int Tics) const override {
+	float TTDC(int Tics) {
 		if (commandCalls) {
 			printf("TTDC called. \n");
 		}
@@ -109,11 +110,29 @@ class Adam : public common {
 		return Degrees;
 	}
 
-	void CMR() const override {
+	void CMR() {
 		if (commandCalls) {
 			printf("CMR called. \n");
 		}
-		cmpc(LeftMotor);
-		cmpc(RightMotor);
+		cmpc(Lc);
+		cmpc(Rc);
+	}
+	void Velocity() {
+		if (commandCalls) {
+			printf("Velocity called. \n");
+		}
+		while (1) {
+			float VLo = Lc;
+			float VRo = Rc;
+			msleep(100);
+			float VLt = Lc;
+			float VRt = Rc;
+
+			Lv = (VLt - VLo) * 10;
+			Rv = (VRt - VRo) * 10;
+			Lp = Lv * 0.06;
+			Rp = Rv * 0.06;
+		}
 	}
 };
+Adam bknd;
